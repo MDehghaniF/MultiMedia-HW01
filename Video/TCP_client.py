@@ -19,7 +19,7 @@ def frame_client(port = 12345):
         #     #s.send(b"end")
         #     break
         # cv2.imwrite("frame.jpg", frame) 
-        f = open("Captured_frame/frame.jpg",'rb')
+        f = open("Frames/frame.jpg",'rb')
         print ('Sending...')
         l = f.read(1024)
         while (l):

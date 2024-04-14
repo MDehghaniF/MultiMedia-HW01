@@ -13,9 +13,10 @@ def frame_server():
     # out = cv2.VideoWriter('server_output.avi', fourcc, 20.0, (640,  480))
 
     s.listen(5)                 # Now wait for client connection.
-
+    f = open('Frames/receivedFrame.png','wb')
     while True:
-        f = open('receivedFrame.png','wb')
+        
+        
         c, addr = s.accept()     # Establish connection with client.
         print( 'Got connection from', addr)
         print ("Receiving...")

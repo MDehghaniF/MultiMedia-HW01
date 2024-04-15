@@ -2,46 +2,50 @@
 
 # import the opencv library 
 import cv2       
-  
-# define a Webcam stream as a video capture object 
-NewStream = cv2.VideoCapture(0) 
 
-#Error handling of webcam connection
-if not NewStream.isOpened():
-    print("Cannot open camera")
-    exit()
+def webcam_stream():
+    
+    # define a Webcam stream as a video capture object 
+    NewStream = cv2.VideoCapture(0) 
+
+    #Error handling of webcam connection
+    if not NewStream.isOpened():
+        print("Cannot open camera")
+        exit()
 
 
-# Define the codec and create VideoWriter object
-record_Mode = True
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('Captured_video/output.avi', fourcc, 20.0, (640,  480))
+    # Define the codec and create VideoWriter object
+    record_Mode = True
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter('Captured_video/output.avi', fourcc, 20.0, (640,  480))
 
-while(True): 
-      
-    # Capture the video frame 
-    # by frame 
-    ret, frame = NewStream.read() 
+    while(True): 
+        
+        # Capture the video frame 
+        # by frame 
+        ret, frame = NewStream.read() 
 
-    # Display the resulting frame 
-    if record_Mode == True :
-        out.write(frame)
-        cv2.imshow('Recording', frame)
-    else :
-        cv2.imshow('webcam', frame)  
+        # Display the resulting frame 
+        if record_Mode == True :
+            # out.write(frame)
+            cv2.imshow('capturing', frame)
+            cv2.imwrite("Frames/frame.jpg", frame) 
+        else :
+            cv2.imshow('webcam', frame)  
 
-    # the 'q' button is set as the 
-    # quitting button you may use any 
-    # desired button of your choice 
-    if cv2.waitKey(1) & 0xFF == ord('q'): 
-        break
-  
-# After the loop release the cap object 
-NewStream.release() 
-out.release()
-# Destroy all the windows 
-cv2.destroyAllWindows() 
+        # the 'q' button is set as the 
+        # quitting button you may use any 
+        # desired button of your choice 
+        if cv2.waitKey(1) & 0xFF == ord('q'): 
+            break
+    
+    # After the loop release the cap object 
+    NewStream.release() 
+    out.release()
+    # Destroy all the windows 
+    cv2.destroyAllWindows() 
 
+webcam_stream()
 
 # class VideoRecorder:
 #     def __init__(self):

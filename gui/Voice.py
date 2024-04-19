@@ -122,19 +122,21 @@ def voice_server(ip_address = '127.0.0.1', port = 5555):
 
             #  server_input = random.choice(string.ascii_letters)
             #  connection_object.send(server_input.encode('utf-8'))
-            #  print("Reciving!!")
+            print("Reciving voice!!")
             audio_data = np.frombuffer(audio_data,dtype=np.float32)
             input_data = np.append(input_data, audio_data)
-            print(f"The input size of data is {input_data.size}")
+            # print(f"The input size of data is {input_data.size}")
         
             audio_data = connection_object.recv(1024)
             
             
             if input_data.size >= audio_size:
+                write('captured_audio/Recieved_audio.wav', sample_rate, input_data)  # Save as WAV file 
+                print("Voice recived")
+                # connection_object.close() 
                 break
             
-        write('captured_audio/Recieved_audio.wav', sample_rate, input_data)  # Save as WAV file 
-        connection_object.close()  
+         
 
 # def client_running(ip_address = '127.0.0.1', port = 5555):
 #     client_process = Process(target=TCP_transmit(ip_address,port))

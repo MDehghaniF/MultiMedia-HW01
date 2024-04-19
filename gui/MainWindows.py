@@ -5,8 +5,16 @@ from WebcamWidget import WebcamWidget
 from FillButton import FillButton
 from ImageViewer import ImageViewer
 import Voice as voice
-
+import Frame as frame
+from multiprocessing import Process
+import time
 # from Voice_cap import *
+
+# Server function that simulates a server running
+def voice_client_function():
+    voice.TCP_transmit()
+def frame_client_function():
+    frame.transmit()
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -127,8 +135,23 @@ class MainWindow(QMainWindow):
 
     def send_button_clicked(self):
         self.send_button.setText("Sent")
-        voice.TCP_transmit()
-        # frame_client()
+        # Create a separate process for the server function
+        try:
+            server_process = Process(target=voice_client_function())
+            server_process.start()
+            time.sleep(4)
+            server_process.close()
+            pass
+        except:
+            QMessageBox.critical(self, "Error", "Connection to server was forcibly closed")
+        try:
+            server_process = Process(target=frame_client_function())
+            server_process.start()
+            time.sleep(0.5)
+            server_process.close()
+            pass
+        except:
+            QMessageBox.critical(self, "Error", "Connection to server was forcibly closed")
 
     def connect_button_clicked(self):
         self.connect_button.setText("Connected")
@@ -142,7 +165,7 @@ class MainWindow(QMainWindow):
                 background-color: rgb(100,255,100);
             }
         """)
-        ip_value = self.ip_line_edit.text()
+        self.ip_value = self.ip_line_edit.text()
         voice.voice_server()
 
 
@@ -152,10 +175,11 @@ class MainWindow(QMainWindow):
 
     def show_button_clicked(self):
         self.image_viewer.show_frame()
+        frame.display()
 
     def play_button_clicked(self):
         self.play_button.setText("Playing")
-        print(self.ip_value)
+        # print(self.ip_value)
         voice.play()
 
     def record_button_clicked(self):

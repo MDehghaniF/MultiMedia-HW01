@@ -77,22 +77,26 @@ def TCP_transmit(ip_address = '127.0.0.1', port = 5555):
             #     print("{}: {}".format("SERVER",data_receive.decode('utf-8')))
 
 
-def voice_server(ip_address = '127.0.0.1', port = 5555):
+def voice_server(port = 6666):
     
-    print("Server start...")
+   
     # Creating a socket instance
     # AF_INET : Work with address family of IP V4
     # SOCK_STREAM: Accept TCP packets (SOCK_DGRAM is for UDP)
     server_object = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
     # Connecting to the localhost
-    ip_address = '127.0.0.1'
-    port = 5555
-    server_object.bind((ip_address, port))
+    host = socket.gethostname() 
+    IP = socket.gethostbyname(host)
+    print("Server Voice start...")
+    print("Your Computer Name is:" + host)
+    print("Your Computer IP Address is:" + IP)
+    print("Your Computer Port Address is:" , port)
+    server_object.bind((IP, port))
     server_object.listen()  
 
 
-    #Once the client connects to the particular port, the server starts to accept the request.
+    #Once the client connects to the particular port, the server starts to accept the reqquest.
     connection_object, _ = server_object.accept()
 
     if connection_object:

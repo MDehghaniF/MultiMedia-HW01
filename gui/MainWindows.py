@@ -11,15 +11,15 @@ import time
 # from Voice_cap import *
 
 # Server function that simulates a server running
-def voice_client_function():
-    voice.TCP_transmit()
-def frame_client_function():
-    frame.transmit()
+def voice_client_function(host):
+    voice.TCP_transmit(host, 6666)
+def frame_client_function(host):
+    frame.transmit(host, 6665)
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.ip_value = "255.255.255.255"
+        self.ip_value = '127.0.0.1'
 
         font = self.font()
         font = QFont("Times New Roman", 12)
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
 
         # Create a QLineEdit for entering IP address
         self.ip_line_edit = QLineEdit(self)
-        self.ip_line_edit.setPlaceholderText("255.255.255.255")
+        self.ip_line_edit.setPlaceholderText("127.0.0.1")
         self.ip_line_edit.setGeometry(650, 35, 200, 20)
         self.ip_line_edit.setStyleSheet("background-color: lightblue; border: 2px solid darkblue;")
         self.ip_line_edit.setFont(font)
@@ -137,21 +137,24 @@ class MainWindow(QMainWindow):
         self.send_button.setText("Sent")
         # Create a separate process for the server function
         try:
-            server_process = Process(target=voice_client_function())
+            server_process = Process(target=frame_client_function, args=(self.ip_value,))
             server_process.start()
-            time.sleep(4)
-            server_process.close()
-            pass
-        except:
-            QMessageBox.critical(self, "Error", "Connection to server was forcibly closed")
+            time.sleep(6)
+            server_process.join()  # Wait for the process to finish
+        except ConnectionRefusedError as e:
+            QMessageBox.critical(self, "Error", "Can not find the server!! Check your IP again")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
         try:
-            server_process = Process(target=frame_client_function())
+            server_process = Process(target=voice_client_function, args=(self.ip_value,))
             server_process.start()
-            time.sleep(0.5)
-            server_process.close()
-            pass
-        except:
-            QMessageBox.critical(self, "Error", "Connection to server was forcibly closed")
+            time.sleep(6)
+            server_process.join()  # Wait for the process to finish
+        except ConnectionRefusedError as e:
+            QMessageBox.critical(self, "Error", "Can not find the server!! Check your IP again")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
+
 
     def connect_button_clicked(self):
         self.connect_button.setText("Connected")
@@ -166,7 +169,8 @@ class MainWindow(QMainWindow):
             }
         """)
         self.ip_value = self.ip_line_edit.text()
-        voice.voice_server()
+        print("Recived IP is : ", self.ip_value)
+        # voice.voice_server()
 
 
     def capture_button_clicked(self):
@@ -175,7 +179,7 @@ class MainWindow(QMainWindow):
 
     def show_button_clicked(self):
         self.image_viewer.show_frame()
-        frame.display()
+        # frame.display()
 
     def play_button_clicked(self):
         self.play_button.setText("Playing")

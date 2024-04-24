@@ -20,7 +20,7 @@ class ImageViewer(QWidget):
         self.setLayout(layout)
 
     def show_frame(self):
-        frame = cv2.imread("Frames/frame.jpg")
+        frame = cv2.imread("Frames/torecv.jpg")
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         h, w, ch = frame.shape
         bytes_per_line = ch * w

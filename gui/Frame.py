@@ -6,7 +6,7 @@ import cv2
 
 def transmit(ip_address = '127.0.0.1', port = 5553):
 
-    client = socket.socket()         # Create a socket object
+    client = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)    # Create a socket object
     host = socket.gethostname() # Get local machine name
     # port = 12345                 # Reserve a port for your service.
 
@@ -29,15 +29,19 @@ def transmit(ip_address = '127.0.0.1', port = 5553):
         break    # Close the socket when done
 
 
-def server(ip_address = '127.0.0.1', port = 5553):
+def server(port = 6665):
         
 
 
     s = socket.socket()         # Create a socket object
     host = socket.gethostname() # Get local machine name
-    # port = 12345                 # Reserve a port for your service.
-    s.bind((ip_address, port))        # Bind to the port
-    s.listen(5)                 # Now wait for client connection.
+    IP = socket.gethostbyname(host)
+    print("Server Frame start...")
+    print("Your Computer Name is:" + host)
+    print("Your Computer IP Address is:" + IP)
+    print("Your Computer Port Address is:" , port)
+    s.bind((IP, port))         # Bind to the port
+    s.listen(5)                # Now wait for client connection.
 
     while True:
         c, addr = s.accept()  # Establish connection with client.

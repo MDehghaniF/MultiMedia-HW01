@@ -139,8 +139,8 @@ class MainWindow(QMainWindow):
         try:
             server_process = Process(target=frame_client_function, args=(self.ip_value,))
             server_process.start()
-            time.sleep(6)
             server_process.join()  # Wait for the process to finish
+            QMessageBox.information(None, "Success", "Frame data sent successfully")
         except ConnectionRefusedError as e:
             QMessageBox.critical(self, "Error", "Can not find the server!! Check your IP again")
         except Exception as e:
@@ -148,8 +148,8 @@ class MainWindow(QMainWindow):
         try:
             server_process = Process(target=voice_client_function, args=(self.ip_value,))
             server_process.start()
-            time.sleep(6)
             server_process.join()  # Wait for the process to finish
+            QMessageBox.information(None, "Success", "Voice data sent successfully")
         except ConnectionRefusedError as e:
             QMessageBox.critical(self, "Error", "Can not find the server!! Check your IP again")
         except Exception as e:
